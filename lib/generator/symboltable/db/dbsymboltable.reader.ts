@@ -55,13 +55,11 @@ export class DBSymbolTableReader {
         let exculdes = DBSymbolTableReader.createExculdesFromFilter(filter);
         let only = DBSymbolTableReader.createOnlyItemsFromFilter(filter);
 
-        if (filter !== undefined || filter !== null) {
-            if (filter.excludeTables) {
-                excludeTables = true;
-            }
-            if (filter.excludeViews) {
-                excludeViews = true;
-            }
+        if (filter.excludeTables) {
+            excludeTables = true;
+        }
+        if (filter.excludeViews) {
+            excludeViews = true;
         }
 
         let names: string[] = [];

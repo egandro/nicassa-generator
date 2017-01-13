@@ -1,7 +1,7 @@
 {
   "name": "nicassa-generator",
   "description": "CLI based code generator for Sequelize, Node, Typescript, Angular 2, Android, Swagger, ORM Lite",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Harald Fielker <harald.fielker@gmail.com>",
   "repository": {
     "type": "git",

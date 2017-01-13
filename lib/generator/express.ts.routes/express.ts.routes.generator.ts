@@ -83,7 +83,13 @@ export class ExpressTSRoutesGenerator extends BaseGenerator {
         let gen: GeneratorConfigSequelizeTSDal = <any>BaseGenerator.getGeneratorByName
             (this.generatorConfig.nicassaParserDBFile, <any>this.generatorConfig.nicassaParserDBGeneratorName);
 
-        // .. to mapp with the settings
+        if (gen === undefined || gen === null) {
+            console.error('error: can\'t find generator with name ' +
+                this.generatorConfig.nicassaParserDBGeneratorName + ' for the nicassaParserDBFile: ' + this.generatorConfig.nicassaParserDBFile + '\'');
+            process.exit(-1);
+        }
+
+        // .. to map with the settings
         let dataTypeMapping = SequelizeTypescriptMapping.dataTypeMapping;
         let typeMapper: SequelizeTsDalTypeMapper = new SequelizeTsDalTypeMapper(gen, dataTypeMapping);
 
