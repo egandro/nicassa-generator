@@ -89,7 +89,6 @@ export class MetadataSymbolTableReader {
                     }
 
                     let methodSymbol: MethodSymbol = {
-                        controller: controllerSymbol,
                         description: method.description,
                         example: method.example,
                         method: method.method,
@@ -99,19 +98,36 @@ export class MetadataSymbolTableReader {
                         type: <any>null,
                         tags: method.tags,
                         bodyParamName: <any>null,
-                        getPath: (): string => {
-                            if (methodSymbol.path === undefined || methodSymbol.path === null) {
-                                return methodSymbol.path
+                        getPath: (kind: string): string => {
+                            if(kind === "Server") {
+                                if (methodSymbol.path === undefined || methodSymbol.path === null) {
+                                    return methodSymbol.path
+                                }
+                                return methodSymbol.path.replace(/{/g, ':').replace(/}/g, '');
                             }
-                            return methodSymbol.path.replace(/{/g, ':').replace(/}/g, '');
+                            if(kind === "Client") {
+                                if (methodSymbol.path === undefined || methodSymbol.path === null) {
+                                    return methodSymbol.path
+                                }
+                                return methodSymbol.path.replace(/{/g, '\' + this\.urlEncode(').replace(/}/g, ') + \'');
+                            }
+                            return methodSymbol.path;
+                        },
+                        needsBody: (): boolean => {
+                            if (methodSymbol.method === 'post' ||
+                                methodSymbol.method === 'patch' ||
+                                methodSymbol.method === 'put') {
+                                return true;
+                            }
+                            return false;
                         }
                     }
 
                     const bodyParameter = method.parameters.find(parameter => parameter.in === 'body');
                     methodSymbol.bodyParamName = bodyParameter ? bodyParameter.name : undefined;
 
-                    methodSymbol.type = MetadataSymbolTableReader.createTypeSymbol(method.type, controllerSymbol, methodSymbol);
-                    MetadataSymbolTableReader.createParameterSymbols(controllerSymbol, methodSymbol, method.parameters);
+                    methodSymbol.type = MetadataSymbolTableReader.createTypeSymbol(method.type);
+                    MetadataSymbolTableReader.createParameterSymbols(methodSymbol, method.parameters);
 
                     controllerSymbol.methods.push(methodSymbol);
                 }
@@ -133,25 +149,15 @@ export class MetadataSymbolTableReader {
                     continue;
                 }
 
-                let referenceTypeSymbol: ReferenceTypeSymbol = {
-                    controller: <any>null,
-                    parameter: <any>null,
-                    method: <any>null,
-                    isPrimitive: false,
-                    isArray: false,
-                    isReferenceType: true,
-                    description: referenceType.description,
-                    name: referenceType.name,
-                    properties: []
-                }
-                referenceTypeSymbol.properties = MetadataSymbolTableReader.createProperties(referenceTypeSymbol, referenceType.properties);
+                let referenceTypeSymbol = MetadataSymbolTableReader.createReferenceTypeSymbol(referenceType);
+                referenceTypeSymbol.properties = MetadataSymbolTableReader.createProperties(referenceType.properties);
                 result.referenceTypes.push(referenceTypeSymbol);
             }
         }
         return result;
     }
 
-    protected static createProperties(referenceTypeSymbol: ReferenceTypeSymbol, properties: Property[]): PropertySymbol[] {
+    protected static createProperties(properties: Property[]): PropertySymbol[] {
         let result: PropertySymbol[] = [];
         if (properties === undefined || properties === null || properties.length == 0) {
             return result;
@@ -161,7 +167,6 @@ export class MetadataSymbolTableReader {
             let property = properties[i];
 
             let propertySymbol: PropertySymbol = {
-                reference: referenceTypeSymbol,
                 description: property.description,
                 name: property.name,
                 length: -1,
@@ -175,7 +180,7 @@ export class MetadataSymbolTableReader {
         return result;
     }
 
-    protected static createParameterSymbols(controllerSymbol: ControllerSymbol, methodSymbol: MethodSymbol, parameters: Parameter[]) {
+    protected static createParameterSymbols(methodSymbol: MethodSymbol, parameters: Parameter[]) {
         if (parameters === undefined || parameters === null || parameters.length == 0) {
             return;
         }
@@ -183,8 +188,6 @@ export class MetadataSymbolTableReader {
         for (let k = 0; k < parameters.length; k++) {
             let parameter = parameters[k];
             let parameterSymbol: ParameterSymbol = {
-                controller: controllerSymbol,
-                method: methodSymbol,
                 description: parameter.description,
                 in: parameter.in,
                 name: parameter.name,
@@ -193,7 +196,7 @@ export class MetadataSymbolTableReader {
                 injected: undefined
             };
 
-            parameterSymbol.type = MetadataSymbolTableReader.createTypeSymbol(parameter.type, controllerSymbol, methodSymbol, parameterSymbol);
+            parameterSymbol.type = MetadataSymbolTableReader.createTypeSymbol(parameter.type);
             parameterSymbol.injected = MetadataSymbolTableReader.createInjectedSymbol(parameterSymbol, <any>parameter.injected);
             methodSymbol.parameters.push(parameterSymbol);
         }
@@ -212,60 +215,69 @@ export class MetadataSymbolTableReader {
         return result;
     }
 
-    protected static createPrimitiveTypeSymbol(type: PrimitiveType, controllerSymbol?: ControllerSymbol, methodSymbol?: MethodSymbol, parameterSymbol?: ParameterSymbol): PrimitiveTypeSymbol {
+    protected static createPrimitiveTypeSymbol(type: PrimitiveType): PrimitiveTypeSymbol {
         let result: PrimitiveTypeSymbol = {
-            controller: controllerSymbol,
-            method: methodSymbol,
-            parameter: parameterSymbol,
             isPrimitive: true,
             isArray: false,
             isReferenceType: false,
+            getMappedName: (kind: string) => {
+                if (result.name === undefined || result.name === null) {
+                    return result.name;
+                }
+                if (result.name === 'datetime') {
+                    return 'Date';
+                }
+                if (result.name === 'buffer') {
+                    return 'Buffer';
+                }
+                return result.name;
+            },
             name: type
         }
         return result;
     }
 
-    protected static createArrayTypeSymbolSymbol(type: ArrayType, controllerSymbol?: ControllerSymbol, methodSymbol?: MethodSymbol, parameterSymbol?: ParameterSymbol): ArrayTypeSymbol {
+    protected static createArrayTypeSymbolSymbol(type: ArrayType): ArrayTypeSymbol {
         let result: ArrayTypeSymbol = {
-            controller: controllerSymbol,
-            method: methodSymbol,
-            parameter: parameterSymbol,
             isPrimitive: false,
             isArray: true,
             isReferenceType: false,
+            getMappedName: (kind: string) => {
+                return "Array";
+            },
             elementType: <any>null
         }
-        result.elementType = MetadataSymbolTableReader.createTypeSymbol(type.elementType, controllerSymbol, methodSymbol, parameterSymbol);
+        result.elementType = MetadataSymbolTableReader.createTypeSymbol(type.elementType);
         return result;
     }
 
-    protected static createReferenceTypeSymbol(type: ReferenceType, controllerSymbol?: ControllerSymbol, methodSymbol?: MethodSymbol, parameterSymbol?: ParameterSymbol): ReferenceTypeSymbol {
+    protected static createReferenceTypeSymbol(type: ReferenceType): ReferenceTypeSymbol {
         let result: ReferenceTypeSymbol = {
-            controller: controllerSymbol,
-            method: methodSymbol,
-            parameter: parameterSymbol,
             isPrimitive: false,
             isArray: false,
             isReferenceType: true,
+            getMappedName: (kind: string) => {
+                return result.name;
+            },
             description: type.description,
             name: type.name,
             properties: []
         }
 
-        result.properties = MetadataSymbolTableReader.createProperties(result, type.properties);
+        result.properties = MetadataSymbolTableReader.createProperties(type.properties);
         return result;
     }
 
-    protected static createTypeSymbol(type: Type, controllerSymbol?: ControllerSymbol, methodSymbol?: MethodSymbol, parameterSymbol?: ParameterSymbol): TypeSymbol {
+    protected static createTypeSymbol(type: Type): TypeSymbol {
         if (typeof type === 'string' || type instanceof String) {
-            return MetadataSymbolTableReader.createPrimitiveTypeSymbol(<PrimitiveType>type, controllerSymbol, methodSymbol, parameterSymbol);
+            return MetadataSymbolTableReader.createPrimitiveTypeSymbol(<PrimitiveType>type);
         }
 
         const arrayType = type as ArrayType;
         if (arrayType.elementType) {
-            return MetadataSymbolTableReader.createPrimitiveTypeSymbol(<any>type, controllerSymbol, methodSymbol, parameterSymbol);
+            return MetadataSymbolTableReader.createArrayTypeSymbolSymbol(<any>type);
         }
 
-        return MetadataSymbolTableReader.createReferenceTypeSymbol((type as ReferenceType), controllerSymbol, methodSymbol, parameterSymbol);
+        return MetadataSymbolTableReader.createReferenceTypeSymbol((type as ReferenceType));
     }
 }

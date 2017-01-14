@@ -22,7 +22,7 @@ export class CmdLineParser {
                 abbr: 't',
                 metavar: 'generator',
                 required: true,
-                help: 'type of the generator (sequelize.ts.dal, express.ts.routes)'
+                help: 'type of the generator (sequelize.ts.dal, express.ts.routes, angular2.client)'
             })
             .option('name', {
                 abbr: 'n',

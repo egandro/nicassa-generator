@@ -103,7 +103,8 @@ export class AddGenerator {
     protected isGeneratorTypeOK(): boolean {
         let arr: string[] = [
             'sequelize.ts.dal',
-            'express.ts.routes'
+            'express.ts.routes',
+            'angular2.client'
         ];
         return (arr.indexOf(this.type) !== -1);
     }

@@ -1,9 +1,7 @@
-import { ControllerSymbol } from './controllersymbol';
 import { ParameterSymbol } from './parametersymbol';
 import { TypeSymbol } from './typesymbol';
 
 export interface MethodSymbol {
-    controller: ControllerSymbol;
     description: string;
     example: any;
     method: string;
@@ -13,5 +11,6 @@ export interface MethodSymbol {
     type: TypeSymbol;
     tags: string[];
     bodyParamName?: string;
-    getPath(): string;
+    getPath(kind: string): string;
+    needsBody(): boolean;
 }

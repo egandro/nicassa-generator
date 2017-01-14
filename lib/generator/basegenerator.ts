@@ -41,7 +41,11 @@ export abstract class BaseGenerator {
             process.exit(-1);
         }
 
-        let toplevel: TopLevel = JSON.parse(str);
+        return BaseGenerator.getGeneratorByNameFromString(str, generatorName);
+    }
+
+    public static getGeneratorByNameFromString(data: string, generatorName: string): GeneratorConfigBasic {
+        let toplevel: TopLevel = JSON.parse(data);
         let nicassaGenerator: NicassaGenerator = <NicassaGenerator>toplevel.nicassaGenerator;
         if (nicassaGenerator === undefined || nicassaGenerator.generators === undefined) {
             return <any>null;

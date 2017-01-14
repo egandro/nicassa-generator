@@ -98,7 +98,7 @@ export class SequelizeTSDalGenerator extends BaseGenerator {
             projectName = 'undefined';
         }
         projectName = SymbolNameMapper.titleCase(projectName);
-        projectName = SymbolNameMapper.dotCase(projectName);
+        projectName = SymbolNameMapper.headerCase(projectName);
         projectName = SymbolNameMapper.lower(projectName);
         let createDecorators = false;
 
