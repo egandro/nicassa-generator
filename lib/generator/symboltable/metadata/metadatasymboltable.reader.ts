@@ -40,24 +40,9 @@ export class MetadataSymbolTableReader {
             return result;
         }
 
-        let excludeControllers: boolean = false;
-        let excludeReferenceTypes: boolean = false;
-        let excludeMethods: string[] = [];
-        let exculdes: string[] = [];
-        let only: string[] = [];
-
-        if (metadata.Controllers !== undefined && !excludeControllers) {
+        if (metadata.Controllers !== undefined) {
             for (let i = 0; i < metadata.Controllers.length; i++) {
                 let ctrl = metadata.Controllers[i];
-
-                // excluded
-                if (only.length == 0 && exculdes.indexOf(ctrl.name) != -1) {
-                    continue;
-                }
-                if (only.length > 0 && only.indexOf(ctrl.name) == -1) {
-                    continue;
-                }
-
                 let controllerSymbol: ControllerSymbol = {
                     location: ctrl.location,
                     methods: [],
@@ -79,15 +64,6 @@ export class MetadataSymbolTableReader {
 
                 for (let k = 0; k < ctrl.methods.length; k++) {
                     let method = ctrl.methods[k];
-
-                    // excluded
-                    if (excludeMethods.indexOf(method.name) != -1) {
-                        continue;
-                    }
-                    if (excludeMethods.indexOf(ctrl.name + '.' + method.name) != -1) {
-                        continue;
-                    }
-
                     let methodSymbol: MethodSymbol = {
                         description: method.description,
                         example: method.example,
@@ -134,21 +110,9 @@ export class MetadataSymbolTableReader {
             }
         }
 
-        if (metadata.ReferenceTypes !== undefined && !excludeReferenceTypes) {
+        if (metadata.ReferenceTypes !== undefined) {
             for (let key in metadata.ReferenceTypes) {
                 let referenceType = metadata.ReferenceTypes[key];
-
-                // excluded
-                if (only.length == 0 && exculdes.indexOf(referenceType.name) != -1) {
-                    continue;
-                }
-                if (only.length > 0 && only.indexOf(referenceType.name) == -1) {
-                    continue;
-                }
-                if (exculdes.length > 0 && exculdes.indexOf(referenceType.name) > -1) {
-                    continue;
-                }
-
                 let referenceTypeSymbol = MetadataSymbolTableReader.createReferenceTypeSymbol(referenceType);
                 referenceTypeSymbol.properties = MetadataSymbolTableReader.createProperties(referenceType.properties);
                 result.referenceTypes.push(referenceTypeSymbol);

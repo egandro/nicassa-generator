@@ -28,6 +28,12 @@ export class SequelizeTSDalGenerator extends BaseGenerator {
     constructor(generatorConfigBasic: GeneratorConfigBasic, nicassaJson: string) {
         super(generatorConfigBasic, nicassaJson);
         this.generatorConfig = <GeneratorConfigSequelizeTSDal>generatorConfigBasic;
+        if (this.generatorConfig !== undefined && this.generatorConfig !== null) {
+            if (this.generatorConfig.filter === undefined || this.generatorConfig.filter === null) {
+                let defaultCfg = this.getDefaultConfig('');
+                this.generatorConfig.filter = defaultCfg.filter;
+            }
+        }
         this.dataTypeMapping = SequelizeTypescriptMapping.dataTypeMapping;
         this.templateDir = __dirname + '/templates';
         this.typeMapper = new SequelizeTsDalTypeMapper(this.generatorConfig, this.dataTypeMapping);

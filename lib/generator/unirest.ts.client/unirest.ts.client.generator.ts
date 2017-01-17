@@ -4,7 +4,7 @@ const process = require('process');
 import { GeneratorConfigBasic } from '../../persistance/generatorconfig.basic';
 import { GeneratorConfigExpressTSRoutes } from '../../persistance/generatorconfig.express.ts.routes';
 import { GeneratorConfigSequelizeTSDal } from '../../persistance/generatorconfig.sequelize.ts.dal';
-import { GeneratorConfigAngular2Client, Angular2ClientFilter } from '../../persistance/generatorconfig.angular2.client';
+import { GeneratorConfigUnirestTSClient, UnirestTSClientFilter } from '../../persistance/generatorconfig.unirest.ts.client';
 
 import { FileManger } from '../filemanager';
 import { BaseGenerator } from '../basegenerator';
@@ -21,15 +21,15 @@ import { DBSymbolTableReader } from '../symboltable/db/dbsymboltable.reader';
 import { SequelizeTsDalTypeMapper } from '../sequelize.ts.dal/sequelize.ts.dal.typemapper.class';
 import { SequelizeTypescriptMapping } from '../sequelize.ts.dal/sequelize.typescript.mapping';
 
-export class Angular2ClientGenerator extends BaseGenerator {
-    protected generatorConfig: GeneratorConfigAngular2Client;
+export class UnirestTSClientGenerator extends BaseGenerator {
+    protected generatorConfig: GeneratorConfigUnirestTSClient;
     protected parentGeneratorConfig: GeneratorConfigExpressTSRoutes;
     protected metadataSymbolTable: MetadataSymbolTable;
     protected dbSymbolTable: DBSymbolTable;
 
     constructor(generatorConfigBasic: GeneratorConfigBasic, nicassaJson: string) {
         super(generatorConfigBasic, nicassaJson);
-        this.generatorConfig = <GeneratorConfigAngular2Client>generatorConfigBasic;
+        this.generatorConfig = <GeneratorConfigUnirestTSClient>generatorConfigBasic;
         if (this.generatorConfig !== undefined && this.generatorConfig !== null) {
             if (this.generatorConfig.filter === undefined || this.generatorConfig.filter === null) {
                 let defaultCfg = this.getDefaultConfig('');
@@ -39,27 +39,27 @@ export class Angular2ClientGenerator extends BaseGenerator {
         this.templateDir = __dirname + '/templates';
     }
 
-    public getDefaultConfig(name: string): GeneratorConfigAngular2Client {
-        let angular2ClientFilter: Angular2ClientFilter = {
+    public getDefaultConfig(name: string): GeneratorConfigUnirestTSClient {
+        let unirestTSClientFilter: UnirestTSClientFilter = {
             exculdeEntity: [],
             exculdeService: [],
             onlyEntity: [],
             onlyService: []
         }
 
-        let type = "angular2.client";
+        let type = "unirest.ts.client";
 
-        let result: GeneratorConfigAngular2Client = {
+        let result: GeneratorConfigUnirestTSClient = {
             name: name,
             type: type,
             active: true,
-            targetDir: './angular2-client',
+            targetDir: './unirest-ts-client',
             parentServerGeneratorConfigName: 'express.ts.routes',
             cleanTargetDir: false,
             createProject: false,
-            projectName: 'angular2-client',
-            ngModuleName: 'Angular2Client',
-            filter: angular2ClientFilter
+            projectName: 'unirest-ts-client',
+            ngModuleName: 'UnirestTSClient',
+            filter: unirestTSClientFilter
         };
 
         return result;
@@ -101,22 +101,18 @@ export class Angular2ClientGenerator extends BaseGenerator {
             ngModuleName: ngModuleName
         };
 
-        // idea from
-        // https://offering.solutions/blog/articles/2016/02/01/consuming-a-rest-api-with-angular-http-service-in-typescript/
-
         await RenderTemplate.renderTemplate(true, this, 'entities.ts.ejs', data);
         await RenderTemplate.renderTemplate(true, this, 'services.ts.ejs', data);
         await RenderTemplate.renderTemplate(createPackageJson, this, 'package.json.ejs', data);
         await RenderTemplate.renderTemplate(createIndex, this, 'index.ts.ejs', data);
         await RenderTemplate.renderTemplate(createProject, this, 'generated.exports.ts.ejs', data);
         await RenderTemplate.renderTemplate(createConfiguration, this, 'configuration.ts.ejs', data);
-        await RenderTemplate.renderTemplate(true, this, 'ng.module.ts.ejs', data);
 
         return await true;
     }
 
 
-    protected applyControllerFilter(filter: Angular2ClientFilter, controllers: ControllerSymbol[]): ControllerSymbol[] {
+    protected applyControllerFilter(filter: UnirestTSClientFilter, controllers: ControllerSymbol[]): ControllerSymbol[] {
         if (filter === undefined || filter === null) {
             return controllers;
         }
@@ -151,7 +147,7 @@ export class Angular2ClientGenerator extends BaseGenerator {
         return result;
     }
 
-    protected applyReferenceTypeFilter(filter: Angular2ClientFilter, referenceTypes: ReferenceTypeSymbol[]): ReferenceTypeSymbol[] {
+    protected applyReferenceTypeFilter(filter: UnirestTSClientFilter, referenceTypes: ReferenceTypeSymbol[]): ReferenceTypeSymbol[] {
         if (referenceTypes === undefined || referenceTypes === null || referenceTypes.length === 0) {
             return referenceTypes;
         }

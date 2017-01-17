@@ -1,6 +1,7 @@
 const process = require('process');
 const fs = require('fs');
 const path = require('path');
+const mkdirSync = require('fs-force-mkdir-sync');
 
 import { BaseGenerator } from './basegenerator';
 
@@ -10,8 +11,7 @@ export class FileManger {
             if (fs.existsSync(generator.getTargetDir())) {
                 return;
             }
-
-            fs.mkdirSync(generator.getTargetDir());
+            mkdirSync(generator.getTargetDir());
         } catch (err) {
             console.error(err);
             process.exit(-1);
