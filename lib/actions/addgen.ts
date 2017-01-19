@@ -105,7 +105,8 @@ export class AddGenerator {
             'sequelize.ts.dal',
             'express.ts.routes',
             'angular2.client',
-            'unirest.ts.client'
+            'unirest.ts.client',
+            'android.ormlite.dal'
         ];
         return (arr.indexOf(this.type) !== -1);
     }

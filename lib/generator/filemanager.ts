@@ -7,20 +7,29 @@ import { BaseGenerator } from './basegenerator';
 
 export class FileManger {
     public static createTargetDirIfNeeded(generator: BaseGenerator) {
+        FileManger.createDirIfNeeded(generator.getTargetDir());
+    }
+
+    public static fileExistInProjectDir(generator: BaseGenerator, fileName: string) {
+        return FileManger.fileExistInDir(generator.getTargetDir(), fileName);
+    }
+
+
+    public static createDirIfNeeded(dir: string) {
         try {
-            if (fs.existsSync(generator.getTargetDir())) {
+            if (fs.existsSync(dir)) {
                 return;
             }
-            mkdirSync(generator.getTargetDir());
+            mkdirSync(dir);
         } catch (err) {
             console.error(err);
             process.exit(-1);
         }
     }
 
-    public static fileExistInProjectDir(generator: BaseGenerator, fileName: string) {
+    public static fileExistInDir(dir: string, fileName: string) {
         try {
-            let file = path.join(generator.getTargetDir(), fileName)
+            let file = path.join(dir, fileName)
             if (fs.existsSync(file)) {
                 return true;
             }
@@ -29,7 +38,6 @@ export class FileManger {
             console.error(err);
             process.exit(-1);
         }
-
     }
 
 }

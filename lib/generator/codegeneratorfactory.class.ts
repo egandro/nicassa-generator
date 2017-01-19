@@ -5,7 +5,7 @@ import { ExpressTSRoutesGenerator } from './express.ts.routes/express.ts.routes.
 import { SequelizeTSDalGenerator } from './sequelize.ts.dal/sequelize.ts.dal.generator';
 import { Angular2ClientGenerator } from './angular2.client/angular2.client.generator';
 import { UnirestTSClientGenerator } from './unirest.ts.client/unirest.ts.client.generator';
-
+import { AndroidORMLiteDalGenerator } from './android.ormlite.dal/android.ormlite.dal.generator';
 
 export class CodeGeneratorFactory {
     public static getCodeGenerator(type: string, generatorConfigBasic: GeneratorConfigBasic, nicassaJson: string): BaseGenerator {
@@ -22,6 +22,9 @@ export class CodeGeneratorFactory {
                 break;
             case 'unirest.ts.client':
                 result = new UnirestTSClientGenerator(generatorConfigBasic, nicassaJson);
+                break;
+            case 'android.ormlite.dal':
+                result = new AndroidORMLiteDalGenerator(generatorConfigBasic, nicassaJson);
                 break;
             default:
                 throw ('unsupported generator type: ' + type);

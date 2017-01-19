@@ -8,6 +8,11 @@ import { BaseGenerator } from './basegenerator';
 
 export class RenderTemplate {
     public static async renderTemplate(active: boolean, generator: BaseGenerator, templateName: string, data?: any, outputFileName?: string): Promise<string> {
+        let targetDir = generator.getTargetDir();
+        return await RenderTemplate.renderTemplateToDir(targetDir, active, generator, templateName, data, outputFileName);
+    }
+
+    public static async renderTemplateToDir(targetDir: string, active: boolean, generator: BaseGenerator, templateName: string, data?: any, outputFileName?: string): Promise<string> {
         let genText: string = <any>null;
 
         if (!active) {
@@ -22,11 +27,11 @@ export class RenderTemplate {
             process.exit(-1);
         }
 
-        genText = await RenderTemplate.renderEjs(generator, templatePath, templateName, data, outputFileName);
+        genText = await RenderTemplate.renderEjs(targetDir, templatePath, templateName, data, outputFileName);
         return await genText;
     }
 
-    private static async renderEjs(generator: BaseGenerator, templatePath: string, templateName: string, data?: any, outputFileName?: string): Promise<string> {
+    private static async renderEjs(targetDir: string, templatePath: string, templateName: string, data?: any, outputFileName?: string): Promise<string> {
         let opts: Ejs.Options = <any>null;
 
         return new Promise<string>((resolve, reject) => {
@@ -41,7 +46,7 @@ export class RenderTemplate {
                 }
 
                 try {
-                    fs.writeFileSync(path.join(generator.getTargetDir(), targetName), str);
+                    fs.writeFileSync(path.join(targetDir, targetName), str);
                 } catch (err) {
                     reject(err);
                 }

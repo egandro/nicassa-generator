@@ -23,7 +23,7 @@
     "fs-force-mkdir-sync": "^1.1.0",
     "identifierfy": "^1.1.1",
     "mysql": "^2.12.0",
-    "nicassa-parser-db": "^0.0.3",
+    "nicassa-parser-db": "^0.0.4",
     "nicassa-parser-ts-express-api": "^0.0.3",
     "nomnom": "^1.8.1",
     "pg": "^6.1.2",

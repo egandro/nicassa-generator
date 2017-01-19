@@ -1,4 +1,4 @@
-export type TableNameEnum = "None" | "TypeScript" | "TypeScriptInstance" | "TypeScriptModel" |"Sequelize";
+export type TableNameEnum = "None" | "TypeScript" | "TypeScriptInstance" | "TypeScriptModel" | "Sequelize";
 
 export const TableNameEnum = {
     None: "None" as TableNameEnum,

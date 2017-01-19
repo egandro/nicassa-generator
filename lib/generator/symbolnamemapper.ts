@@ -15,6 +15,10 @@ export class SymbolNameMapper {
         (value);
     }
 
+    public static pathCase(value: string): string {
+        return ChangeCase.pathCase(value);
+    }
+
     public static dotCase(value: string): string {
         return ChangeCase.dotCase(value);
     }
