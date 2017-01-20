@@ -81,7 +81,6 @@ export class AndroidORMLiteDalGenerator extends BaseGenerator {
             projectName: <any>null,
             namespace: 'com.example.android.ormlite.dal',
             namespaceEntity: 'com.example.android.ormlite.dal.entity',
-            utcDates: true,
             modelNaming: modelNaming,
             dataTypeMapping: {},
             filter: filter

@@ -19,9 +19,6 @@ export class AndroidOrmliteDalTypeMapper extends TypeMapper {
     public columnDataTypeMapper(table: TableSymbol, column: ColumnSymbol, kind: string): string {
         // TODO -> custom mappings from this.generator.dataTypeMapping
         let type = column.dataType.toLowerCase();
-        if (this.generatorConfig.utcDates && kind === 'OrmliteColumnFormat') {
-            kind = 'OrmliteColumnFormatUTC';
-        }
         return this.dataTypeMapping[kind][type];
     }
 

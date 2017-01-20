@@ -10,7 +10,6 @@ export interface GeneratorConfigAndroidORMLiteDal extends GeneratorConfigBasic {
     projectName?: string;
     namespace: string;
     namespaceEntity: string;
-    utcDates: boolean;
     filter?: Filter;
     modelNaming: ModelNaming;
     dataTypeMapping?: { [mappings: string]: { [dbtype: string]: string } };
