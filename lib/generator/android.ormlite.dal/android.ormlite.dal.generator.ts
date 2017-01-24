@@ -142,17 +142,8 @@ export class AndroidORMLiteDalGenerator extends BaseGenerator {
             let entityData = data;
             (<any>entityData).entity = entity;
             let entityJava = entity.getMappedName('Java') + ".java";
-            await RenderTemplate.renderTemplateToDir(namespaceEntityDir, true, this, 'entity.java.ejs', data, entityJava);
+            await RenderTemplate.renderTemplateToDir(namespaceEntityDir, true, this, 'entity.java.ejs', entityData, entityJava);
         }
-
-
-        // await RenderTemplate.renderTemplate(createDecorators, this, 'decorators.ts.ejs', data);
-        // await RenderTemplate.renderTemplate(true, this, 'models.ts.ejs', data);
-        // await RenderTemplate.renderTemplate(true, this, 'asserts.ts.ejs', data);
-        //await RenderTemplate.renderTemplate(true, this, 'entitycontainer.ts.ejs', data, entitycontainerBaseFileName + '.ts');
-        // await RenderTemplate.renderTemplate(createPackageJson, this, 'package.json.ejs', data);
-        // await RenderTemplate.renderTemplate(createIndex, this, 'index.ts.ejs', data);
-        // await RenderTemplate.renderTemplate(createProject, this, 'generated.exports.ts.ejs', data);
 
         return await true;
     }

@@ -188,11 +188,26 @@ export class MetadataSymbolTableReader {
                 if (result.name === undefined || result.name === null) {
                     return result.name;
                 }
-                if (result.name === 'datetime') {
-                    return 'Date';
-                }
-                if (result.name === 'buffer') {
-                    return 'Buffer';
+                if (kind === "Java") {
+                    if (result.name === 'string') {
+                        return 'String';
+                    }
+                    if (result.name === 'boolean') {
+                        return 'Boolean';
+                    }
+                    if (result.name === 'datetime') {
+                        return 'java.util.Date';
+                    }
+                    if (result.name === 'buffer') {
+                        return 'byte[]';
+                    }
+                } else {
+                    if (result.name === 'datetime') {
+                        return 'Date';
+                    }
+                    if (result.name === 'buffer') {
+                        return 'Buffer';
+                    }
                 }
                 return result.name;
             },

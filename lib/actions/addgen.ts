@@ -106,7 +106,8 @@ export class AddGenerator {
             'express.ts.routes',
             'angular2.client',
             'unirest.ts.client',
-            'android.ormlite.dal'
+            'android.ormlite.dal',
+            'android.retrofit.client'
         ];
         return (arr.indexOf(this.type) !== -1);
     }
