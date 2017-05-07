@@ -16,7 +16,7 @@ export class DBSymbolTableReader {
         return result;
     }
 
-    protected static readSchema(json: string): Schema {
+    public static readSchema(json: string): Schema {
         let toplevel: TopLevel = JSON.parse(json);
         let nicassaParserDB: NicassaParserDB = <NicassaParserDB>toplevel.nicassaParserDB;
         if (nicassaParserDB === undefined || nicassaParserDB.schema === undefined) {
@@ -26,7 +26,7 @@ export class DBSymbolTableReader {
         return <Schema>nicassaParserDB.schema;
     }
 
-    protected static createSymbolTable(schema: Schema, filter: Filter, typeMapper: TypeMapper): DBSymbolTable {
+    public static createSymbolTable(schema: Schema, filter: Filter, typeMapper: TypeMapper): DBSymbolTable {
         let result: DBSymbolTable = {
             tables: [],
             views: [],

@@ -1,8 +1,8 @@
 const path = require('path');
-import { Filter } from 'nicassa-parser-db';
+import { Filter, Schema } from 'nicassa-parser-db';
 
 import { GeneratorConfigBasic } from '../../persistance/generatorconfig.basic';
-import { GeneratorConfigAndroidORMLiteDal } from '../../persistance/generatorconfig.android.ormlite.dal';
+import { GeneratorConfigAndroidORMLiteDal, ViewDataTypeMap } from '../../persistance/generatorconfig.android.ormlite.dal';
 
 import { ModelNaming } from '../../persistance/naming/modelnaming';
 import { CaseEnum } from '../../persistance/naming/case.enum';
@@ -83,14 +83,25 @@ export class AndroidORMLiteDalGenerator extends BaseGenerator {
             namespaceEntity: 'com.example.android.ormlite.dal.entity',
             modelNaming: modelNaming,
             dataTypeMapping: {},
-            filter: filter
+            filter: filter,
+            viewDataTypeMap: []
         };
 
         return result;
     }
 
     protected async generateCode(): Promise<boolean> {
-        this.dbSymbolTable = DBSymbolTableReader.readFromJsonString(this.nicassaJson, <any>this.generatorConfig.filter, this.typeMapper);
+        // add some tweaks to the schema - SQLite Views might have no detectable dataType
+        let schema: Schema = DBSymbolTableReader.readSchema(this.nicassaJson);
+        let viewDataTypeMap: ViewDataTypeMap[] = [];
+        if (this.generatorConfig.viewDataTypeMap != null) {
+             viewDataTypeMap = this.generatorConfig.viewDataTypeMap;
+        }
+        if (viewDataTypeMap.length > 0) {
+            this.mapViewDataTypes(schema, viewDataTypeMap);
+        }
+
+        this.dbSymbolTable = DBSymbolTableReader.createSymbolTable(schema, <any>this.generatorConfig.filter, this.typeMapper);
 
         let createProject: boolean = this.generatorConfig.createProject;
         let createGitIgnore: boolean = false;
@@ -148,5 +159,34 @@ export class AndroidORMLiteDalGenerator extends BaseGenerator {
         return await true;
     }
 
+    protected async mapViewDataTypes(schema: Schema, viewDataTypeMap: ViewDataTypeMap[]) {
+        if (schema == null || schema.views == null || schema.views.length == 0) {
+            return;
+        }
+
+        if (viewDataTypeMap == null || viewDataTypeMap.length == 0) {
+            return;
+        }
+
+        for (let i = 0; i < schema.views.length; i++) {
+            let view = schema.views[i];
+            for (let k = 0; k < viewDataTypeMap.length; k++) {
+                let map = viewDataTypeMap[k];
+                if (view.name == map.name) {
+                    for (let c = 0; c < view.columns.length; c++) {
+                        let column = view.columns[c];
+                        for (let m = 0; m < map.columns.length; m++) {
+                            let columnmap = map.columns[m];
+                            if (column.name == columnmap.name) {
+                                column.dataType = columnmap.dataType; // do the mapping
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
 }
 
