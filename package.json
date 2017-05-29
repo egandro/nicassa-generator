@@ -1,7 +1,7 @@
 {
   "name": "nicassa-generator",
   "description": "CLI based code generator for Sequelize, Node, Typescript, Angular 2, Android, Swagger, ORM Lite",
-  "version": "0.0.13",
+  "version": "0.0.15",
   "author": "Harald Fielker <harald.fielker@gmail.com>",
   "repository": {
     "type": "git",
@@ -16,27 +16,26 @@
   "dependencies": {
     "@types/change-case": "^2.3.1",
     "@types/ejs": "^2.3.33",
-    "@types/node": "^6.0.55",
+    "@types/node": "^7.0.22",
     "@types/nomnom": "^0.0.28",
-    "change-case": "^3.0.0",
-    "ejs": "^2.5.5",
+    "change-case": "^3.0.1",
+    "ejs": "^2.5.6",
     "fs-force-mkdir-sync": "^1.1.0",
     "identifierfy": "^1.1.1",
-    "mysql": "^2.12.0",
-    "nicassa-parser-db": "^0.0.4",
-    "nicassa-parser-ts-express-api": "^0.0.3",
+    "mysql": "^2.13.0",
+    "nicassa-parser-db": "^0.0.6",
+    "nicassa-parser-ts-express-api": "^0.0.6",
     "nomnom": "^1.8.1",
-    "pg": "^6.1.2",
+    "pg": "^6.2.3",
     "pg-hstore": "^2.3.2",
     "prompt": "^1.0.0",
     "sqlite3": "^3.1.8",
-    "tedious": "^1.14.0",
-    "ts-node": "^2.0.0",
-    "typescript": "^2.1.4"
+    "tedious": "^2.0.0",
+    "ts-node": "^3.0.4",
+    "typescript": "^2.3.3"
   },
   "devDependencies": {
-    "codelyzer": "^2.0.0-beta.4",
-    "tslint": "^4.2.0"
+    "tslint": "^5.3.2"
   },
   "keywords": [
     "mysql",

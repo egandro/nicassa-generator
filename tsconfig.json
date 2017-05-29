@@ -16,9 +16,6 @@
     "noUnusedParameters": false,
     "noUnusedLocals": true,
     "strictNullChecks": true,
-    "sourceMap": false,
-    "typeRoots": [
-      "./node_modules/@types"
-    ]
+    "sourceMap": false
   }
 }
