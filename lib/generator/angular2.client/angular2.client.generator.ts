@@ -76,10 +76,12 @@ export class Angular2ClientGenerator extends BaseGenerator {
         let createIndex: boolean = false;
         let createProject: boolean = this.generatorConfig.createProject;
         let createConfiguration: boolean = false;
+        let createErrorReporter: boolean = false;
         if (createProject) {
             createPackageJson = !FileManger.fileExistInProjectDir(this, 'package.json');
             createIndex = !FileManger.fileExistInProjectDir(this, 'index.ts');
             createConfiguration = !FileManger.fileExistInProjectDir(this, 'configuration.ts');
+            createErrorReporter = !FileManger.fileExistInProjectDir(this, 'errorreporter.ts');
         }
         let projectName = this.generatorConfig.projectName;
         if (projectName === undefined || projectName === null) {
@@ -110,7 +112,7 @@ export class Angular2ClientGenerator extends BaseGenerator {
         await RenderTemplate.renderTemplate(createIndex, this, 'index.ts.ejs', data);
         await RenderTemplate.renderTemplate(createProject, this, 'generated.exports.ts.ejs', data);
         await RenderTemplate.renderTemplate(createConfiguration, this, 'configuration.ts.ejs', data);
-        await RenderTemplate.renderTemplate(createConfiguration, this, 'errorreporter.ts.ejs', data);
+        await RenderTemplate.renderTemplate(createErrorReporter, this, 'errorreporter.ts.ejs', data);
         await RenderTemplate.renderTemplate(true, this, 'ng.module.ts.ejs', data);
 
         return await true;
