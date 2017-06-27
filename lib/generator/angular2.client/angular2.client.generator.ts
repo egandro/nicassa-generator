@@ -110,6 +110,7 @@ export class Angular2ClientGenerator extends BaseGenerator {
         await RenderTemplate.renderTemplate(createIndex, this, 'index.ts.ejs', data);
         await RenderTemplate.renderTemplate(createProject, this, 'generated.exports.ts.ejs', data);
         await RenderTemplate.renderTemplate(createConfiguration, this, 'configuration.ts.ejs', data);
+        await RenderTemplate.renderTemplate(createConfiguration, this, 'errorreporter.ts.ejs', data);
         await RenderTemplate.renderTemplate(true, this, 'ng.module.ts.ejs', data);
 
         return await true;
