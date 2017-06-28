@@ -53,6 +53,7 @@ export class Angular2ClientGenerator extends BaseGenerator {
             name: name,
             type: type,
             active: true,
+            customErrorHandler: false,
             targetDir: './angular2-client',
             parentServerGeneratorConfigName: 'express.ts.routes',
             cleanTargetDir: false,
@@ -77,11 +78,16 @@ export class Angular2ClientGenerator extends BaseGenerator {
         let createProject: boolean = this.generatorConfig.createProject;
         let createConfiguration: boolean = false;
         let createErrorReporter: boolean = false;
+        let customErrorHandler: boolean = false;
         if (createProject) {
             createPackageJson = !FileManger.fileExistInProjectDir(this, 'package.json');
             createIndex = !FileManger.fileExistInProjectDir(this, 'index.ts');
             createConfiguration = !FileManger.fileExistInProjectDir(this, 'configuration.ts');
             createErrorReporter = !FileManger.fileExistInProjectDir(this, 'errorreporter.ts');
+        }
+        if (this.generatorConfig.customErrorHandler != null && this.generatorConfig.customErrorHandler !== undefined &&
+            this.generatorConfig.customErrorHandler ==  true) {
+            customErrorHandler = true;
         }
         let projectName = this.generatorConfig.projectName;
         if (projectName === undefined || projectName === null) {
@@ -100,7 +106,8 @@ export class Angular2ClientGenerator extends BaseGenerator {
             controllers: controllers,
             referenceTypes: referenceTypes,
             projectName: projectName,
-            ngModuleName: ngModuleName
+            ngModuleName: ngModuleName,
+            customErrorHandler: customErrorHandler
         };
 
         // idea from

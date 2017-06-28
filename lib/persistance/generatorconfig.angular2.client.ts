@@ -8,6 +8,7 @@ export interface Angular2ClientFilter {
 }
 
 export interface GeneratorConfigAngular2Client extends GeneratorConfigBasic {
+    customErrorHandler: boolean;
     parentServerGeneratorConfigName: string;
     cleanTargetDir: boolean;
     createProject: boolean;
