@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const process = require('process');
+const endOfLine = require('os').EOL;
 
 import * as Ejs from 'ejs';
 
@@ -46,6 +47,8 @@ export class RenderTemplate {
                 }
 
                 try {
+                    // unify to OS dependent newlines
+                    str = str.replace(/(?:\r\n|\r|\n)/g, endOfLine);
                     fs.writeFileSync(path.join(targetDir, targetName), str);
                 } catch (err) {
                     reject(err);
