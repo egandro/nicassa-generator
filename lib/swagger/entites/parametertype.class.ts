@@ -1,6 +1,6 @@
 import { PropertyType } from './propertytype.class';
 
-export type InType = '' | 'body' | 'query';
+export type InType = '' | 'body' | 'query' | 'path';
 
 export class ParameterType extends PropertyType {
     in: InType = '';

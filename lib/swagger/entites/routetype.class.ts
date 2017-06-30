@@ -1,4 +1,4 @@
-import { ParameterType } from './parametertype.class';
+import { ParameterType, InType } from './parametertype.class';
 import { ResponseType } from './responsetype.class';
 
 export class RouteType {
@@ -15,5 +15,15 @@ export class RouteType {
             }
         }
         return null;
+    }
+
+    // attention - in angular some verbs has automaticually a body type
+    hasParameterType(type: InType): boolean {
+        for (let parameter of this.parameter) {
+            if (parameter.in == type) {
+                return true;
+            }
+        }
+        return false;
     }
 }
