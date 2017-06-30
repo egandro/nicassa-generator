@@ -18,7 +18,7 @@ export class PropertyType {
     get isComplexType(): boolean {
         return !this.isPrimitive;
     }
-    isPrimitive: boolean = false;
+    isPrimitive: boolean = true;
     isReference: boolean = false;
     isRequired: boolean = false;
     isScalar: boolean = true;
@@ -55,6 +55,7 @@ export class PropertyType {
         result.$ref = ref;
         result.isMap = true;
         result.type = 'complex';
+        result.isPrimitive = false;
         result.isReference = true;
         return result;
     }
@@ -74,6 +75,7 @@ export class PropertyType {
         }
         result.$ref = ref;
         result.type = 'complex';
+        result.isPrimitive = false;
         result.isReference = true;
         return result;
     }
@@ -160,6 +162,7 @@ export class PropertyType {
                 if (data.items.$ref !== null && data.items.$ref !== undefined) {
                     result.$ref = data.items.$ref;
                     result.type = 'complex';
+                    result.isPrimitive = false;
                     result.isScalar = false;
                     result.isArray = true;
                     result.isReference = true;
