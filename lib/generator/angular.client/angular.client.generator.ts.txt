@@ -2,18 +2,13 @@ const fs = require('fs');
 const process = require('process');
 
 import { GeneratorConfigBasic } from '../../persistance/generatorconfig.basic';
-import { GeneratorConfigExpressTSRoutes } from '../../persistance/generatorconfig.express.ts.routes';
 import { GeneratorConfigSequelizeTSDal } from '../../persistance/generatorconfig.sequelize.ts.dal';
-import { GeneratorConfigAngular2Client, Angular2ClientFilter } from '../../persistance/generatorconfig.angular2.client';
+import { GeneratorConfigAngularClient, AngularClientFilter } from '../../persistance/generatorconfig.angular.client';
 
 import { FileManger } from '../filemanager';
 import { BaseGenerator } from '../basegenerator';
 import { RenderTemplate } from '../rendertemplate';
 
-import { MetadataSymbolTable } from '../symboltable/metadata/metadatasymboltable';
-import { ControllerSymbol } from '../symboltable/metadata/controllersymbol';
-import { ReferenceTypeSymbol } from '../symboltable/metadata/referencetypesymbol';
-import { MetadataSymbolTableReader } from '../symboltable/metadata/metadatasymboltable.reader';
 
 import { SymbolNameMapper } from '../symbolnamemapper';
 import { DBSymbolTable } from '../symboltable/db/dbsymboltable';
@@ -21,15 +16,15 @@ import { DBSymbolTableReader } from '../symboltable/db/dbsymboltable.reader';
 import { SequelizeTsDalTypeMapper } from '../sequelize.ts.dal/sequelize.ts.dal.typemapper.class';
 import { SequelizeTypescriptMapping } from '../sequelize.ts.dal/sequelize.typescript.mapping';
 
-export class Angular2ClientGenerator extends BaseGenerator {
-    protected generatorConfig: GeneratorConfigAngular2Client;
+export class AngularClientGenerator extends BaseGenerator {
+    protected generatorConfig: GeneratorConfigAngularClient;
     protected parentGeneratorConfig: GeneratorConfigExpressTSRoutes;
     protected metadataSymbolTable: MetadataSymbolTable;
     protected dbSymbolTable: DBSymbolTable;
 
     constructor(generatorConfigBasic: GeneratorConfigBasic, nicassaJson: string) {
         super(generatorConfigBasic, nicassaJson);
-        this.generatorConfig = <GeneratorConfigAngular2Client>generatorConfigBasic;
+        this.generatorConfig = <GeneratorConfigAngularClient>generatorConfigBasic;
         if (this.generatorConfig !== undefined && this.generatorConfig !== null) {
             if (this.generatorConfig.filter === undefined || this.generatorConfig.filter === null) {
                 let defaultCfg = this.getDefaultConfig('');
@@ -39,28 +34,28 @@ export class Angular2ClientGenerator extends BaseGenerator {
         this.templateDir = __dirname + '/templates';
     }
 
-    public getDefaultConfig(name: string): GeneratorConfigAngular2Client {
-        let angular2ClientFilter: Angular2ClientFilter = {
+    public getDefaultConfig(name: string): GeneratorConfigAngularClient {
+        let angularClientFilter: AngularClientFilter = {
             exculdeEntity: [],
             exculdeService: [],
             onlyEntity: [],
             onlyService: []
         }
 
-        let type = "angular2.client";
+        let type = "angular.client";
 
-        let result: GeneratorConfigAngular2Client = {
+        let result: GeneratorConfigAngularClient = {
             name: name,
             type: type,
             active: true,
             customErrorHandler: false,
-            targetDir: './angular2-client',
+            targetDir: './angular-client',
             parentServerGeneratorConfigName: 'express.ts.routes',
             cleanTargetDir: false,
             createProject: false,
-            projectName: 'angular2-client',
-            ngModuleName: 'Angular2Client',
-            filter: angular2ClientFilter
+            projectName: 'angular-client',
+            ngModuleName: 'AngularClient',
+            filter: angularClientFilter
         };
 
         return result;
@@ -126,7 +121,7 @@ export class Angular2ClientGenerator extends BaseGenerator {
     }
 
 
-    protected applyControllerFilter(filter: Angular2ClientFilter, controllers: ControllerSymbol[]): ControllerSymbol[] {
+    protected applyControllerFilter(filter: AngularClientFilter, controllers: ControllerSymbol[]): ControllerSymbol[] {
         if (filter === undefined || filter === null) {
             return controllers;
         }
@@ -161,7 +156,7 @@ export class Angular2ClientGenerator extends BaseGenerator {
         return result;
     }
 
-    protected applyReferenceTypeFilter(filter: Angular2ClientFilter, referenceTypes: ReferenceTypeSymbol[]): ReferenceTypeSymbol[] {
+    protected applyReferenceTypeFilter(filter: AngularClientFilter, referenceTypes: ReferenceTypeSymbol[]): ReferenceTypeSymbol[] {
         if (referenceTypes === undefined || referenceTypes === null || referenceTypes.length === 0) {
             return referenceTypes;
         }

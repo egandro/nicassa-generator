@@ -54,7 +54,6 @@ export class UnirestTSClientGenerator extends BaseGenerator {
             type: type,
             active: true,
             targetDir: './unirest-ts-client',
-            parentServerGeneratorConfigName: 'express.ts.routes',
             cleanTargetDir: false,
             createProject: false,
             projectName: 'unirest-ts-client',

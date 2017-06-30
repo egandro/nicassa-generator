@@ -184,7 +184,7 @@ export class ApiParser {
                 // bug in tsoa
                 regEx = new RegExp('\\[\]', 'gi');
                 while (true) {
-                    uniqueName = entity.replace(regEx, replacement);
+                    uniqueName = uniqueName.replace(regEx, replacement);
                     // console.log("NewName", entity, uniqueName);
                     if (entity === uniqueName) {
                         break;
@@ -214,8 +214,8 @@ export class ApiParser {
             if (this.definitionsDict.hasOwnProperty(entity)) {
                 let definition = this.definitionsDict[entity];
                 let complexType: ComplexType = new ComplexType();
-                complexType.name = this.definitionsDict[entity].complexNameUnique; // map
-                complexType.type = <any>complexType.name;
+                complexType.name = entity;
+                complexType.type = this.definitionsDict[entity].complexNameUnique; // map
                 for (let k = 0; k < definition.propertyTypes.length; k++) {
                     let propertyType: PropertyType = definition.propertyTypes[k];
                     if (propertyType.isReference) {
@@ -227,9 +227,10 @@ export class ApiParser {
                         let ref = propertyType.$ref;
                         let arr = ref.split('/');
                         let resolvedType = arr[arr.length - 1];
+
+                        resolvedType = this.definitionsDict[resolvedType].complexNameUnique;  // map
                         this.definitionsDict[entity].propertyTypes[k].type = resolvedType;
                         delete this.definitionsDict[entity].propertyTypes[k].$ref; // kill this
-                        resolvedType = this.definitionsDict[resolvedType].complexNameUnique;  // map
                     }
                     complexType.properties.push(propertyType);
                 }

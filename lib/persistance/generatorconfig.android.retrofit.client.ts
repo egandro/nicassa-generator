@@ -8,7 +8,6 @@ export interface AndroidRetrofitFilter {
 }
 
 export interface GeneratorConfigAndroidRetrofitClient extends GeneratorConfigBasic {
-    parentServerGeneratorConfigName: string;
     cleanTargetDir: boolean;
     createProject: boolean;
     projectName?: string;

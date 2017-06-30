@@ -1,18 +1,18 @@
 import { GeneratorConfigBasic } from './generatorconfig.basic';
 
-export interface Angular2ClientFilter {
+export interface AngularClientFilter {
     exculdeEntity?: string[];
     exculdeService?: string[];
     onlyEntity?: string[];
     onlyService?: string[];
 }
 
-export interface GeneratorConfigAngular2Client extends GeneratorConfigBasic {
+export interface GeneratorConfigAngularClient extends GeneratorConfigBasic {
+    swaggerFile: string;
     customErrorHandler: boolean;
-    parentServerGeneratorConfigName: string;
     cleanTargetDir: boolean;
     createProject: boolean;
     ngModuleName: string;
     projectName?: string;
-    filter?: Angular2ClientFilter;
+    filter?: AngularClientFilter;
 }

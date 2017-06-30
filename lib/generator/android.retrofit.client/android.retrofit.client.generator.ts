@@ -3,7 +3,6 @@ const fs = require('fs');
 const process = require('process');
 
 import { GeneratorConfigBasic } from '../../persistance/generatorconfig.basic';
-import { GeneratorConfigExpressTSRoutes } from '../../persistance/generatorconfig.express.ts.routes';
 import { GeneratorConfigSequelizeTSDal } from '../../persistance/generatorconfig.sequelize.ts.dal';
 import { GeneratorConfigAndroidRetrofitClient, AndroidRetrofitFilter } from '../../persistance/generatorconfig.android.retrofit.client';
 
@@ -24,7 +23,6 @@ import { AndroidRetrofitJavaMapping } from './android.retrofit.java.mapping';
 
 export class AndroidRetrofitClientGenerator extends BaseGenerator {
     protected generatorConfig: GeneratorConfigAndroidRetrofitClient;
-    protected parentGeneratorConfig: GeneratorConfigExpressTSRoutes;
     protected metadataSymbolTable: MetadataSymbolTable;
     protected dbSymbolTable: DBSymbolTable;
 
@@ -55,7 +53,6 @@ export class AndroidRetrofitClientGenerator extends BaseGenerator {
             type: type,
             active: true,
             targetDir: './unirest-ts-client',
-            parentServerGeneratorConfigName: 'express.ts.routes',
             cleanTargetDir: false,
             createProject: false,
             projectName: 'unirest-ts-client',
@@ -68,8 +65,6 @@ export class AndroidRetrofitClientGenerator extends BaseGenerator {
     }
 
     protected async generateCode(): Promise<boolean> {
-        this.parentGeneratorConfig = <any>BaseGenerator.getGeneratorByNameFromString
-            (this.nicassaJson, this.generatorConfig.parentServerGeneratorConfigName);
 
         this.metadataSymbolTable = MetadataSymbolTableReader.readFromJsonString(this.nicassaJson);
         this.setLengthToMetaData();

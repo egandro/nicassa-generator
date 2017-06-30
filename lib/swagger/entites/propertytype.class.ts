@@ -1,3 +1,5 @@
+import { TypeMapping } from '../type.mapping';
+
 export type TypeNames = ''
     | 'int32'
     | 'int64'
@@ -9,6 +11,8 @@ export type TypeNames = ''
     | 'enum'
     | 'base64'
     | 'complex';
+
+export type getMappedTypeHandler = (kind: string) => string;
 
 export class PropertyType {
     get isComplexType(): boolean {
@@ -24,6 +28,16 @@ export class PropertyType {
     type: TypeNames = '';
     name: string = '';
     enums: string[] = [];
+
+    getMappedType: getMappedTypeHandler = (kind: string) => {
+        let type = this.type.toLowerCase();
+        if (TypeMapping.dataTypeMapping.hasOwnProperty(kind)) {
+            if (TypeMapping.dataTypeMapping[kind].hasOwnProperty(type)) {
+                return TypeMapping.dataTypeMapping[kind][type];
+            }
+        }
+        return this.type;
+    }
 
     // reference type - this needs to be resolved later
     $ref: string;
@@ -168,6 +182,7 @@ export class PropertyType {
                 break;
             case 'object':
                 console.log(`notice: type '${entityName}' property '${name}' has object type - treating as string`);
+                result.type = 'string';
                 break;
             default:
                 throw 'createFromType: unknown data type ' + data.type;

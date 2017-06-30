@@ -8,7 +8,6 @@ export interface UnirestTSClientFilter {
 }
 
 export interface GeneratorConfigUnirestTSClient extends GeneratorConfigBasic {
-    parentServerGeneratorConfigName: string;
     cleanTargetDir: boolean;
     createProject: boolean;
     ngModuleName: string;

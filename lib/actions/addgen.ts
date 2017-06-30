@@ -103,8 +103,7 @@ export class AddGenerator {
     protected isGeneratorTypeOK(): boolean {
         let arr: string[] = [
             'sequelize.ts.dal',
-            'express.ts.routes',
-            'angular2.client',
+            'angular.client',
             'unirest.ts.client',
             'android.ormlite.dal',
             'android.retrofit.client'
