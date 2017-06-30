@@ -14,5 +14,6 @@ export interface GeneratorConfigAngularClient extends GeneratorConfigBasic {
     createProject: boolean;
     ngModuleName: string;
     projectName?: string;
+    controllerNames: string[];
     filter?: AngularClientFilter;
 }

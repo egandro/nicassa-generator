@@ -7,7 +7,6 @@ import * as SwaggerParser from 'swagger-parser';
 import { ApiDescription } from './entites/apidesciption.class';
 import { ComplexType } from './entites/complextype.class';
 import { PropertyType } from './entites/propertytype.class';
-import { ControllerType } from './entites/controllertype.class';
 import { ParameterType } from './entites/parametertype.class';
 import { ResponseType } from './entites/responsetype.class';
 
@@ -27,27 +26,18 @@ export class ApiParser {
             result.complexTypes = this.parseDefinitions(swagger.definitions);
         }
 
-        if (swagger.paths != null || swagger.paths !== undefined) {
-            result.controllers = this.parseRoutes(swagger.paths);
-        }
+        result.routes = this.parseRoutes(swagger.paths);
 
         return await result;
     }
 
-    private parseRoutes(paths: any): ControllerType[] {
-        let result: ControllerType[] = [];
 
-        let controllerDict: any = {};
+    private parseRoutes(paths: any): RouteType[] {
+        let result: RouteType[] = [];
+
         for (let path in paths) {
-            let name = this.getControllerNameFromPath(path);
-            if (!controllerDict.hasOwnProperty(name)) {
-                let controller = new ControllerType();
-                controller.name = name;
-                controllerDict[name] = controller;
-                result.push(controller);
-            }
             let data = paths[path];
-            controllerDict[name].routes.push(this.parseRoute(path, data));
+            result.push(this.parseRoute(path, data));
         }
         return result;
     }
@@ -76,6 +66,17 @@ export class ApiParser {
                     //console.log(operation);
                     let parameters = this.parseParameters(operation.parameters);
                     route.parameter = parameters;
+                }
+
+                if (operation.security != null &&
+                    operation.security !== undefined&&
+                    operation.security.length > 0) {
+                    for (let i = 0; i < operation.security.length; i++) {
+                        let item: any = operation.security[i];
+                        if (item.hasOwnProperty('jwt')) {
+                            route.security = 'jwt';
+                        }
+                    }
                 }
             }
             // this must be here - only one verb!
@@ -141,15 +142,6 @@ export class ApiParser {
         }
 
         return result;
-    }
-
-    private getControllerNameFromPath(path: string): string {
-        let pathArr = path.split('/');
-        let name = pathArr[0];
-        if (name == ''){
-            name = pathArr[1];
-        }
-        return name;
     }
 
     private parseDefinitions(definitions: any): ComplexType[] {

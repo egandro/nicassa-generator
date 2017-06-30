@@ -1,7 +1,7 @@
-import { ControllerType } from './../lib/swagger/entites/controllertype.class';
+import { RouteType } from '../lib/swagger/entites/routetype.class';
+import { ApiParser } from './../lib/swagger/apiparser.class';
 import { ApiDescription } from './../lib/swagger/entites/apidesciption.class';
 import { ComplexType } from './../lib/swagger/entites/complextype.class';
-import { ApiParser } from './../lib/swagger/apiparser.class';
 
 main();
 
@@ -30,14 +30,10 @@ async function main() {
         }
     }
 
-    for (let k = 0; k < api.controllers.length; k++) {
-        let controller: ControllerType = api.controllers[k];
-        // console.log(type.type);
-        for (let r = 0; r < controller.routes.length; r++) {
-           // let route = controller.routes[r];
-           // console.log(route.path, route.response);
-           // console.log(route);
-        }
+    for (let k = 0; k < api.routes.length; k++) {
+        let route: RouteType = api.routes[k];
+        route = route;
+       // console.log(route);
     }
 
     // console.log(api);

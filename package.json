@@ -14,7 +14,7 @@
     "nicassa-generator": "launcher.js"
   },
   "scripts": {
-   "gentest-alltypes": "cd test && cd alltypes && tsoa swagger",
+    "gentest-alltypes": "cd test && cd alltypes && tsoa swagger",
     "gentest-alltypes-optional": "cd test && cd alltypesoptional && tsoa swagger",
     "gentest-alltypes-array": "cd test && cd alltypesarray && tsoa swagger",
     "gentest-alltypes-array-optional": "cd test && cd alltypesarrayoptional && tsoa swagger",
@@ -38,8 +38,8 @@
     "pg-hstore": "^2.3.2",
     "prompt": "^1.0.0",
     "sqlite3": "^3.1.8",
-    "tedious": "^2.0.0",
     "swagger-parser": "^3.4.1",
+    "tedious": "^2.0.0",
     "ts-node": "^3.1.0",
     "typescript": "^2.4.1"
   },

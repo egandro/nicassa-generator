@@ -1,12 +1,15 @@
 import { ParameterType, InType } from './parametertype.class';
 import { ResponseType } from './responsetype.class';
 
+export type SecurityType = '' | 'jwt';
+
 export class RouteType {
     path: string;
     verb: string;
     operationId: string;
     parameter: ParameterType[] = [];
     response: ResponseType[] = [];
+    security: SecurityType = '';
 
     getBodyParameter(): ParameterType | null {
         for (let parameter of this.parameter) {
@@ -25,5 +28,9 @@ export class RouteType {
             }
         }
         return false;
+    }
+
+    pathNoSlash(): string {
+        return this.path.replace(/^\/|\/$/g, '');
     }
 }

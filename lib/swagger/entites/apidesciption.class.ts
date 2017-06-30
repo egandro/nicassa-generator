@@ -1,7 +1,7 @@
 import { ComplexType } from './complextype.class';
-import { ControllerType } from './controllertype.class';
+import { RouteType } from './routetype.class';
 
 export class ApiDescription {
     complexTypes: ComplexType[] = [];
-    controllers: ControllerType[] = [];
+    routes: RouteType[];
 }
