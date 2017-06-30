@@ -7,4 +7,13 @@ export class RouteType {
     operationId: string;
     parameter: ParameterType[] = [];
     response: ResponseType[] = [];
+
+    getBodyParameter(): ParameterType | null {
+        for (let parameter of this.parameter) {
+            if (parameter.in == 'body') {
+                return parameter;
+            }
+        }
+        return null;
+    }
 }

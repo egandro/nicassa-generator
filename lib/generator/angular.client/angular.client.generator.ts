@@ -100,13 +100,13 @@ export class AngularClientGenerator extends BaseGenerator {
         // https://offering.solutions/blog/articles/2016/02/01/consuming-a-rest-api-with-angular-http-service-in-typescript/
 
         await RenderTemplate.renderTemplate(true, this, 'entities.ts.ejs', data);
-        //await RenderTemplate.renderTemplate(true, this, 'services.ts.ejs', data);
-        //await RenderTemplate.renderTemplate(createPackageJson, this, 'package.json.ejs', data);
-        //await RenderTemplate.renderTemplate(createIndex, this, 'index.ts.ejs', data);
-        //await RenderTemplate.renderTemplate(createProject, this, 'generated.exports.ts.ejs', data);
-        //await RenderTemplate.renderTemplate(createConfiguration, this, 'configuration.ts.ejs', data);
-        //await RenderTemplate.renderTemplate(createErrorReporter, this, 'errorreporter.ts.ejs', data);
-        //await RenderTemplate.renderTemplate(true, this, 'ng.module.ts.ejs', data);
+        await RenderTemplate.renderTemplate(true, this, 'services.ts.ejs', data);
+        await RenderTemplate.renderTemplate(createPackageJson, this, 'package.json.ejs', data);
+        await RenderTemplate.renderTemplate(createIndex, this, 'index.ts.ejs', data);
+        await RenderTemplate.renderTemplate(createProject, this, 'generated.exports.ts.ejs', data);
+        await RenderTemplate.renderTemplate(createConfiguration, this, 'configuration.ts.ejs', data);
+        await RenderTemplate.renderTemplate(createErrorReporter, this, 'errorreporter.ts.ejs', data);
+        await RenderTemplate.renderTemplate(true, this, 'ng.module.ts.ejs', data);
 
         return await true;
     }

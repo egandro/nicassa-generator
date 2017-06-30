@@ -8,7 +8,8 @@ import {
   Tags,
   Body,
   Post,
-  Header
+  Header,
+  Response
 } from 'tsoa';
 
 /**
@@ -385,6 +386,12 @@ export class ComplexTypesController extends Controller {
     };
   }
 
+  @Response<ErrorResponseModel>(400, 'Unexpected error')
+  @Get('MultipleResponses')
+  public async MultipleResponses(): Promise<string> {
+    return 'success';
+  }
+
   @Get('UnionTypeResponse')
   public async getUnionTypeResponse(): Promise<string | boolean> {
     return '';
@@ -438,6 +445,23 @@ export class ComplexTypesController extends Controller {
   public async getGenericPrimitiveArray(): Promise<GenericModel<string[]>> {
     throw "";
   }
+
+  @Get('NoReturnValue')
+  public async NoReturnValue(): Promise<void> {
+    throw "";
+  }
+
+  @Get('StringReturnValue')
+  public async StringReturnValue(): Promise<string> {
+    throw "";
+  }
+
+/*  // not allowed
+  @Get('AnyReturnValue')
+  public async AnyReturnValue(): Promise<any> {
+    throw "";
+  }
+  */
 }
 
 export interface ErrorResponse {

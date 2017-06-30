@@ -7,12 +7,20 @@ export class ParameterType extends PropertyType {
 
     public static createFromParameter(data: any): ParameterType {
         // we have a .type node
-        if (data === null || data.in === null || data.in === undefined) {
+        if (data == null || data.in === null || data.in === undefined) {
             console.log(data);
             throw 'createFromParameter: parameter has no "in" type';
         }
+        if (data.name == null || data.name === undefined) {
+            console.log(data);
+            throw 'createFromParameter: parameter has no name';
+        }
         let result: ParameterType = new ParameterType();
+        result.name = data.name;
         result.in = data.in;
+        if (data.required != null && data.required !== undefined) {
+           result.isRequired = data.required;
+        }
         if (result.in == 'body') {
             if (data.schema === null || data.schema === undefined) {
                 throw 'createFromParameter: body type without schema';
