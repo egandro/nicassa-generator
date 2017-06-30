@@ -1,7 +1,7 @@
 {
   "name": "nicassa-generator",
   "description": "CLI based code generator for Sequelize, Node, Typescript, Angular 2, Android, Swagger, ORM Lite",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "author": "Harald Fielker <harald.fielker@gmail.com>",
   "repository": {
     "type": "git",
@@ -13,6 +13,16 @@
   "bin": {
     "nicassa-generator": "launcher.js"
   },
+  "scripts": {
+   "gentest-alltypes": "cd test && cd alltypes && tsoa swagger",
+    "gentest-alltypes-optional": "cd test && cd alltypesoptional && tsoa swagger",
+    "gentest-alltypes-array": "cd test && cd alltypesarray && tsoa swagger",
+    "gentest-alltypes-array-optional": "cd test && cd alltypesarrayoptional && tsoa swagger",
+    "gentest-complextypes": "cd test && cd complextypes && tsoa swagger",
+    "gentest": "npm run gentest-alltypes && npm run gentest-alltypes-optional && npm run gentest-alltypes-array && npm run gentest-alltypes-array-optional && npm run gentest-complextypes",
+    "testexec": "node launcher-test.js",
+    "test": "npm run gentest && npm run testexec"
+  },
   "dependencies": {
     "@types/ejs": "^2.3.33",
     "@types/node": "^7.0.22",
@@ -23,18 +33,22 @@
     "identifierfy": "^1.1.1",
     "mysql": "^2.13.0",
     "nicassa-parser-db": "^0.0.7",
-    "nicassa-parser-ts-express-api": "^0.0.11",
     "nomnom": "^1.8.1",
     "pg": "^6.2.3",
     "pg-hstore": "^2.3.2",
     "prompt": "^1.0.0",
     "sqlite3": "^3.1.8",
     "tedious": "^2.0.0",
-    "ts-node": "^3.0.4",
-    "typescript": "^2.3.3"
+    "swagger-parser": "^3.4.1",
+    "ts-node": "^3.1.0",
+    "typescript": "^2.4.1"
   },
   "devDependencies": {
-    "tslint": "^5.3.2"
+    "@types/node": "^8.0.5",
+    "@types/nomnom": "^0.0.28",
+    "@types/swagger-parser": "^4.0.1",
+    "tslint": "^5.4.3",
+    "tsoa": "^1.2.2"
   },
   "keywords": [
     "mysql",

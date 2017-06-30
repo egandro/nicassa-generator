@@ -10,6 +10,9 @@
 # test files in test
 /test/*-sdb.json
 
+# test swagger files
+/test/**/swagger.json
+
 # dependencies
 /node_modules
 /bower_components
