@@ -2,7 +2,7 @@
 
 nicassa-generator is a CLI toolkit for creating source code.
 
-You require parsers such as nicassa-db-parser or nicassa-parser-ts-express-api
+You require parsers such as nicassa-db-parser or tsoa / swagger
 
 ## Installation
 
