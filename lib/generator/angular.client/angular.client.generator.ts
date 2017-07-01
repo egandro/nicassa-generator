@@ -1,13 +1,12 @@
-const changeCase = require('change-case');
 
 import { GeneratorConfigBasic } from '../../persistance/generatorconfig.basic';
 import { GeneratorConfigAngularClient, AngularClientFilter } from '../../persistance/generatorconfig.angular.client';
 
 import { ApiParser } from '../../swagger/apiparser.class';
+import { ApiTools } from '../../swagger/apitools.class';
+
 import { ApiDescription } from '../../swagger/entites/apidesciption.class';
 import { ControllerType } from '../../swagger/entites/controllertype.class';
-import { ComplexType } from '../../swagger/entites/complextype.class';
-import { RouteType } from '../../swagger/entites/routetype.class';
 
 import { FileManger } from '../filemanager';
 import { BaseGenerator } from '../basegenerator';
@@ -87,11 +86,18 @@ export class AngularClientGenerator extends BaseGenerator {
         projectName = SymbolNameMapper.lower(projectName);
         let ngModuleName = this.generatorConfig.ngModuleName;
 
-        let controllers: ControllerType[] = this.createControllersFromRoute(ngModuleName, this.generatorConfig.controllerNames, api.routes);
+        let controllers: ControllerType[] = ApiTools.createControllersFromRoute(ngModuleName, this.generatorConfig.controllerNames, api.routes);
+        let complexTypes = api.complexTypes
 
-        controllers = this.applyControllerFilter(<any>this.generatorConfig.filter, controllers);
-        let complexTypes = this.applyReferenceTypeFilter(<any>this.generatorConfig.filter, api.complexTypes);
+        if(this.generatorConfig.filter != null) {
+            let exculdeController: string[] = <any>this.generatorConfig.filter.exculdeService;
+            let onlyService: string[] = <any>this.generatorConfig.filter.onlyService;
+            let exculdeEntity: string[] = <any>this.generatorConfig.filter.exculdeEntity;
+            let onlyEntity: string[] = <any>this.generatorConfig.filter.onlyEntity;
 
+            controllers = ApiTools.applyControllerFilter(exculdeController, onlyService, controllers);
+            complexTypes = ApiTools.applyReferenceTypeFilter(exculdeEntity, onlyEntity, api.complexTypes);
+        }
 
         let data = {
             controllers: controllers,
@@ -152,114 +158,6 @@ export class AngularClientGenerator extends BaseGenerator {
         }
     }
     */
-
-
-    protected createControllersFromRoute(defaultControllerName: string, controllerNames: string[], routes: RouteType[]): ControllerType[] {
-        let result: ControllerType[] = [];
-
-        if (controllerNames == null || controllerNames == undefined || controllerNames.length == 0) {
-            // we can't unflatten
-            let ctrl: ControllerType = new ControllerType();
-            ctrl.name = defaultControllerName;
-            for (let r = 0; r < routes.length; r++) {
-                let route = routes[r];
-                route.operationId = changeCase.lowerCaseFirst(route.operationId);
-                ctrl.routes.push(route);
-            }
-
-            result.push(ctrl);
-            return result;
-        }
-
-        for (let c = 0; c < controllerNames.length; c++) {
-            let controllerName = controllerNames[c];
-            if (controllerName.toLowerCase().endsWith("controller")) {
-                controllerName = controllerName.substring(0, controllerName.length - "controller".length);
-            }
-
-            let ctrl: ControllerType = new ControllerType();
-            ctrl.name = controllerName;
-            for (let r = 0; r < routes.length; r++) {
-                let route = routes[r];
-                if (route.operationId.startsWith(controllerName)) {
-                    route.operationId = route.operationId.substring(controllerName.length);
-                    route.operationId = changeCase.lowerCaseFirst(route.operationId);
-                    ctrl.routes.push(route);
-                }
-            }
-
-            result.push(ctrl);
-        }
-
-
-        return result;
-    }
-
-    protected applyControllerFilter(filter: AngularClientFilter, controllers: ControllerType[]): ControllerType[] {
-        if (filter === undefined || filter === null) {
-            return controllers;
-        }
-
-        if (controllers === undefined || controllers === null || controllers.length === 0) {
-            return controllers;
-        }
-
-        let exculdeController: string[] = <any>filter.exculdeService;
-        let only: string[] = <any>filter.onlyService;
-
-        if (exculdeController === undefined || exculdeController === null) {
-            exculdeController = [];
-        }
-        if (only === undefined || only === null) {
-            only = [];
-        }
-
-        let result: ControllerType[] = [];
-        for (let k = 0; k < controllers.length; k++) {
-            let ctrl = controllers[k];
-            // excluded
-            if (only.length == 0 && exculdeController.indexOf(ctrl.name) != -1) {
-                continue;
-            }
-            if (only.length > 0 && only.indexOf(ctrl.name) == -1) {
-                continue;
-            }
-            result.push(ctrl);
-        }
-
-        return result;
-    }
-
-    protected applyReferenceTypeFilter(filter: AngularClientFilter, referenceTypes: ComplexType[]): ComplexType[] {
-        if (referenceTypes === undefined || referenceTypes === null || referenceTypes.length === 0) {
-            return referenceTypes;
-        }
-
-        let exculdeEntity: string[] = <any>filter.exculdeEntity;
-        let only: string[] = <any>filter.onlyEntity;
-
-        if (exculdeEntity === undefined || exculdeEntity === null) {
-            exculdeEntity = [];
-        }
-        if (only === undefined || only === null) {
-            only = [];
-        }
-
-        let result: ComplexType[] = [];
-        for (let k = 0; k < referenceTypes.length; k++) {
-            let entity = referenceTypes[k];
-            // excluded
-            if (only.length == 0 && exculdeEntity.indexOf(entity.name) != -1) {
-                continue;
-            }
-            if (only.length > 0 && only.indexOf(entity.name) == -1) {
-                continue;
-            }
-            result.push(entity);
-        }
-
-        return result;
-    }
 
 }
 

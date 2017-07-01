@@ -1,4 +1,3 @@
-import { RouteType } from './entites/routetype.class';
 const fs = require('fs');
 
 import { Options } from 'swagger-parser';
@@ -9,6 +8,7 @@ import { ComplexType } from './entites/complextype.class';
 import { PropertyType } from './entites/propertytype.class';
 import { ParameterType } from './entites/parametertype.class';
 import { ResponseType } from './entites/responsetype.class';
+import { RouteType } from './entites/routetype.class';
 
 export class ApiParser {
     private definitionsDict: any = {};
@@ -30,7 +30,6 @@ export class ApiParser {
 
         return await result;
     }
-
 
     private parseRoutes(paths: any): RouteType[] {
         let result: RouteType[] = [];

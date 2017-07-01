@@ -8,9 +8,11 @@ export interface UnirestTSClientFilter {
 }
 
 export interface GeneratorConfigUnirestTSClient extends GeneratorConfigBasic {
+    swaggerFile: string;
     cleanTargetDir: boolean;
     createProject: boolean;
     ngModuleName: string;
     projectName?: string;
+    controllerNames: string[];
     filter?: UnirestTSClientFilter;
 }

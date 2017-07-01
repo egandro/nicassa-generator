@@ -3,7 +3,7 @@ import { GeneratorConfigBasic } from '../persistance/generatorconfig.basic';
 import { BaseGenerator } from './basegenerator';
 import { SequelizeTSDalGenerator } from './sequelize.ts.dal/sequelize.ts.dal.generator';
 import { AngularClientGenerator } from './angular.client/angular.client.generator';
-// import { UnirestTSClientGenerator } from './unirest.ts.client/unirest.ts.client.generator';
+import { UnirestTSClientGenerator } from './unirest.ts.client/unirest.ts.client.generator';
 import { AndroidORMLiteDalGenerator } from './android.ormlite.dal/android.ormlite.dal.generator';
 // import { AndroidRetrofitClientGenerator } from './android.retrofit.client/android.retrofit.client.generator';
 
@@ -18,9 +18,8 @@ export class CodeGeneratorFactory {
                 result = new AngularClientGenerator(generatorConfigBasic, nicassaJson);
                 break;
             case 'unirest.ts.client':
-                // result = new UnirestTSClientGenerator(generatorConfigBasic, nicassaJson);
-                // break;
-                throw "unirest.ts.client currently disabled";
+                result = new UnirestTSClientGenerator(generatorConfigBasic, nicassaJson);
+                break;
             case 'android.ormlite.dal':
                 result = new AndroidORMLiteDalGenerator(generatorConfigBasic, nicassaJson);
                 break;
