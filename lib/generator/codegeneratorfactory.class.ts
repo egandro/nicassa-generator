@@ -5,7 +5,7 @@ import { SequelizeTSDalGenerator } from './sequelize.ts.dal/sequelize.ts.dal.gen
 import { AngularClientGenerator } from './angular.client/angular.client.generator';
 import { UnirestTSClientGenerator } from './unirest.ts.client/unirest.ts.client.generator';
 import { AndroidORMLiteDalGenerator } from './android.ormlite.dal/android.ormlite.dal.generator';
-// import { AndroidRetrofitClientGenerator } from './android.retrofit.client/android.retrofit.client.generator';
+import { AndroidRetrofitClientGenerator } from './android.retrofit.client/android.retrofit.client.generator';
 
 export class CodeGeneratorFactory {
     public static getCodeGenerator(type: string, generatorConfigBasic: GeneratorConfigBasic, nicassaJson: string): BaseGenerator {
@@ -24,9 +24,8 @@ export class CodeGeneratorFactory {
                 result = new AndroidORMLiteDalGenerator(generatorConfigBasic, nicassaJson);
                 break;
             case 'android.retrofit.client':
-                // result = new AndroidRetrofitClientGenerator(generatorConfigBasic, nicassaJson);
-                // break;
-                throw "android.retrofit.client currently disabled";
+                result = new AndroidRetrofitClientGenerator(generatorConfigBasic, nicassaJson);
+                break;
             default:
                 throw ('unsupported generator type: ' + type);
         }

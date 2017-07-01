@@ -12,6 +12,28 @@ export class TypeMapping {
             boolean: "boolean",
             enum: "string",
             base64: "Buffer"
+        },
+        "JavaRequired": {
+            int32: "int",
+            int64: "long",
+            string: "String",
+            float: "float",
+            double: "double",
+            date: "java.util.Date",
+            boolean: "boolean",
+            enum: "String",
+            base64: "byte[]"
+        },
+        "JavaNotRequired": {
+            int32: "Integer",
+            int64: "Long",
+            string: "String",
+            float: "Float",
+            double: "Double",
+            date: "java.util.Date",
+            boolean: "Boolean",
+            enum: "String",
+            base64: "byte[]"
         }
     }
 }

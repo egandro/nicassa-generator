@@ -12,7 +12,7 @@ export type TypeNames = ''
     | 'base64'
     | 'complex';
 
-export type getMappedTypeHandler = (kind: string) => string;
+export type getMappedTypeHandler = (kind: string, isRequired?: boolean) => string;
 
 export class PropertyType {
     get isComplexType(): boolean {
@@ -29,8 +29,15 @@ export class PropertyType {
     name: string = '';
     enums: string[] = [];
 
-    getMappedType: getMappedTypeHandler = (kind: string) => {
+    getMappedType: getMappedTypeHandler = (kind: string, isRequired?: boolean) => {
         let type = this.type.toLowerCase();
+        if (isRequired != null) {
+            if (isRequired) {
+                kind += "Required";
+            } else {
+                kind += "NotRequired";
+            }
+        }
         if (TypeMapping.dataTypeMapping.hasOwnProperty(kind)) {
             if (TypeMapping.dataTypeMapping[kind].hasOwnProperty(type)) {
                 return TypeMapping.dataTypeMapping[kind][type];
