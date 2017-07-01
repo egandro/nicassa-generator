@@ -163,7 +163,7 @@ export class AngularClientGenerator extends BaseGenerator {
             ctrl.name = defaultControllerName;
             for (let r = 0; r < routes.length; r++) {
                 let route = routes[r];
-                route.operationId = changeCase.camelCase(route.operationId);
+                route.operationId = changeCase.lowerCaseFirst(route.operationId);
                 ctrl.routes.push(route);
             }
 
@@ -183,7 +183,7 @@ export class AngularClientGenerator extends BaseGenerator {
                 let route = routes[r];
                 if (route.operationId.startsWith(controllerName)) {
                     route.operationId = route.operationId.substring(controllerName.length);
-                    route.operationId = changeCase.camelCase(route.operationId);
+                    route.operationId = changeCase.lowerCaseFirst(route.operationId);
                     ctrl.routes.push(route);
                 }
             }
