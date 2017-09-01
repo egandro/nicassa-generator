@@ -46,7 +46,8 @@ export class SequelizeTypescriptMapping {
             "character varying": "string",
             "USER-DEFINED": "string",
             "uniqueidentifier": "string",
-            "uuid": "string"
+            "uuid": "string",
+            "json": "string",
         },
         "Sequelize": {
             tinyint: 'Sequelize.BOOLEAN',
@@ -94,7 +95,8 @@ export class SequelizeTypescriptMapping {
             character: 'Sequelize.STRING',
             "USER-DEFINED": 'Sequelize.STRING',
             uniqueidentifier: 'Sequelize.UUID',
-            uuid: 'Sequelize.UUID'
+            uuid: 'Sequelize.UUID',
+            json: 'Sequelize.JSON',
         }
     }
 }

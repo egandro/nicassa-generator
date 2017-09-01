@@ -45,7 +45,9 @@ export class AndroidOrmLiteJavaMapping {
             geometry: "String",
             "character varying": "String",
             "USER-DEFINED": "String",
-            "uniqueidentifier": "java.util.UUID"
+            "uniqueidentifier": "java.util.UUID",
+            "uuid": "java.util.UUID",
+            "json": "String"
         },
         "OrmliteColumnFormat": {
             tinyint: <any>null,
@@ -93,6 +95,8 @@ export class AndroidOrmLiteJavaMapping {
             character: <any>null,
             "USER-DEFINED": <any>null,
             uniqueidentifier: <any>null,
+            uuid: <any>null,
+            json: <any>null,
         },
         "OrmliteDataType": {
             tinyint: <any>null,
@@ -140,6 +144,8 @@ export class AndroidOrmLiteJavaMapping {
             character: <any>null,
             "USER-DEFINED": <any>null,
             uniqueidentifier: <any>null,
+            uuid: <any>null,
+            json: <any>null,
         }
     }
 }
