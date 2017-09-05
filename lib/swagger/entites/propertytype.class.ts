@@ -50,17 +50,20 @@ export class PropertyType {
             if (this.pattern != null && this.pattern !== undefined) {
                 validators.push('Validators.pattern(/' + this.pattern + '/)');
             }
-            if (validators.length == 0) {
+            const length = validators.length;
+            if (length == 0) {
                 return '';
             }
-            if (validators.length == 1) {
-                return validators[0];
-            }
-            let result = 'Validators.compose([';
+            let result = '[';
+            let count = 0;
             for (let validator of validators) {
-                result += validator + ', ';
+                result += validator;
+                count++;
+                if (count < length) {
+                    result += ', ';
+                }
             }
-            result += '])'
+            result += ']'
             return result;
         }
 
