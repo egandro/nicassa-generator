@@ -29,7 +29,41 @@ export class PropertyType {
     name: string = '';
     enums: string[] = [];
 
+    // validators supported by tsoa
+    maxLength?: number;
+    minLength?: number;
+    pattern?: string;
+
     getMappedType: getMappedTypeHandler = (kind: string, isRequired?: boolean) => {
+
+        if (kind === 'AngularFormValidator') {
+            let validators: any = [];
+            if (this.isRequired) {
+                validators.push('Validators.required');
+            }
+            if (this.maxLength != null && this.maxLength !== undefined) {
+                validators.push('Validators.maxLength(' + this.maxLength + ')');
+            }
+            if (this.minLength != null && this.minLength !== undefined) {
+                validators.push('Validators.minLength(' + this.minLength + ')');
+            }
+            if (this.pattern != null && this.pattern !== undefined) {
+                validators.push('Validators.pattern(/' + this.pattern + '/)');
+            }
+            if (validators.length == 0) {
+                return '';
+            }
+            if (validators.length == 1) {
+                return validators[0];
+            }
+            let result = 'Validators.compose([';
+            for (let validator of validators) {
+                result += validator + ', ';
+            }
+            result += '])'
+            return result;
+        }
+
         let type = this.type.toLowerCase();
         if (isRequired != null) {
             if (isRequired) {
@@ -43,6 +77,7 @@ export class PropertyType {
                 return TypeMapping.dataTypeMapping[kind][type];
             }
         }
+
         return this.type;
     }
 

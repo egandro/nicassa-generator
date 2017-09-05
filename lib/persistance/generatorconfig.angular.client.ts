@@ -12,6 +12,7 @@ export interface GeneratorConfigAngularClient extends GeneratorConfigBasic {
     customErrorHandler: boolean;
     cleanTargetDir: boolean;
     createProject: boolean;
+    createFormValidators?: boolean;
     ngModuleName: string;
     projectName?: string;
     controllerNames: string[];

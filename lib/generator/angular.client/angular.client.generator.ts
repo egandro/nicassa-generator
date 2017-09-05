@@ -48,6 +48,7 @@ export class AngularClientGenerator extends BaseGenerator {
             targetDir: './angular-client',
             cleanTargetDir: false,
             createProject: false,
+            createFormValidators: true,
             projectName: 'angular-client',
             ngModuleName: 'AngularClient',
             controllerNames: [],
@@ -67,6 +68,10 @@ export class AngularClientGenerator extends BaseGenerator {
         let createConfiguration: boolean = false;
         let createErrorReporter: boolean = false;
         let customErrorHandler: boolean = false;
+        let createFormValidators: boolean = false;
+        if (this.generatorConfig.createFormValidators) {
+            createFormValidators = true;
+        }
         if (createProject) {
             createPackageJson = !FileManger.fileExistInProjectDir(this, 'package.json');
             createIndex = !FileManger.fileExistInProjectDir(this, 'index.ts');
@@ -104,7 +109,8 @@ export class AngularClientGenerator extends BaseGenerator {
             complexTypes: complexTypes,
             projectName: projectName,
             ngModuleName: ngModuleName,
-            customErrorHandler: customErrorHandler
+            customErrorHandler: customErrorHandler,
+            createFormValidators: createFormValidators
         };
 
         // idea from
@@ -118,6 +124,7 @@ export class AngularClientGenerator extends BaseGenerator {
         await RenderTemplate.renderTemplate(createConfiguration, this, 'configuration.ts.ejs', data);
         await RenderTemplate.renderTemplate(createErrorReporter, this, 'errorreporter.ts.ejs', data);
         await RenderTemplate.renderTemplate(true, this, 'ng.module.ts.ejs', data);
+        await RenderTemplate.renderTemplate(createFormValidators, this, 'formvalidators.ts.ejs', data);
 
         return await true;
     }

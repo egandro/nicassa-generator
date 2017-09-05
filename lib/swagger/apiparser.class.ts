@@ -272,15 +272,26 @@ export class ApiParser {
             for (let name in definition.properties) {
                 if (definition.properties.hasOwnProperty(name)) {
                     let prop = definition.properties[name];
+                    let propType: PropertyType;
                     if (prop.type != null && prop.type !== undefined) {
                         // console.log(entityName, name, prop);
-                        result.push(PropertyType.createFromType(entityName, prop, name, isRequiredArr));
+                        propType = PropertyType.createFromType(entityName, prop, name, isRequiredArr);
                     } else if (prop.$ref != null && prop.$ref !== undefined) {
-                        result.push(PropertyType.createRef(prop.$ref, name, isRequiredArr));
+                        propType = PropertyType.createRef(prop.$ref, name, isRequiredArr);
                     } else {
                         console.log(entityName, name, prop);
                         throw "not implemented";
                     }
+                    if (prop.hasOwnProperty('maxLength')) {
+                        propType.maxLength = prop['maxLength'];
+                    }
+                    if (prop.hasOwnProperty('minLength')) {
+                        propType.minLength = prop['minLength'];
+                    }
+                    if (prop.hasOwnProperty('pattern')) {
+                        propType.pattern = prop['pattern'];
+                    }
+                    result.push(propType);
                 }
             }
         }
