@@ -1,4 +1,4 @@
-import { GeneratorConfigSequelizeTSDal } from '../../persistance/generatorconfig.sequelize.ts.dal';
+import { GeneratorConfigSequelizeTSDal, CustomJSDocDecorator } from '../../persistance/generatorconfig.sequelize.ts.dal';
 
 import { TypeMapper } from '../symboltable/db/typemapper.class';
 
@@ -11,15 +11,94 @@ import { ColumnNameEnum } from './enums/columname.enum'
 import { SymbolNameMapper } from '../symbolnamemapper'
 
 export class SequelizeTsDalTypeMapper extends TypeMapper {
+    private customDecoratorsMap: { [key: string]: CustomJSDocDecorator } = <any>null;
 
     constructor(protected generatorConfig: GeneratorConfigSequelizeTSDal, dataTypeMapping: { [mappings: string]: { [dbtype: string]: string } }) {
         super(dataTypeMapping);
     }
 
-    public columnDataTypeMapper(table: TableSymbol, column: ColumnSymbol, kind: string): string {
+    private parseCustomDJSDocDecorators(data: CustomJSDocDecorator[]) {
+        this.customDecoratorsMap = {};
+        for (let item of data) {
+            const key = item.entity.toLowerCase();
+            this.customDecoratorsMap[key] = item;
+        }
+    }
+
+    public columnDataTypeMapper(table: TableSymbol, column: ColumnSymbol, kind: string): any {
         // TODO -> custom mappings from this.generator.dataTypeMapping
         let type = column.dataType.toLowerCase();
-        return this.dataTypeMapping[kind][type];
+        let result: any = this.dataTypeMapping[kind][type];
+
+        if (kind == 'TypeScriptDecorator') {
+            result = [];
+            if (!this.generatorConfig.createJSDocDecorators) {
+                // jsDoc decorators must be enabled to create them
+                return result;
+            }
+
+            let type = result;
+            let hasType = false;
+            if (type && type.length > 0) {
+                hasType = true;
+                result.push('@is' + type);
+            }
+
+            let hasMaxLength = false;
+            if (column.length !== null && column.length !== undefined) {
+                hasMaxLength = true;
+                result.push('@maxLength ' + column.length);
+            }
+
+            if (this.generatorConfig.customDJSDocDecorators && this.customDecoratorsMap == null) {
+                // create dictionary if needed
+                this.parseCustomDJSDocDecorators(this.generatorConfig.customDJSDocDecorators);
+            }
+
+            const key = table.name.toLowerCase() + '.' + column.name.toLowerCase();
+            if (this.customDecoratorsMap.hasOwnProperty(key)) {
+                const item = this.customDecoratorsMap[key];
+                if (item.enabled !== null && item.enabled !== undefined && item.enabled == false) {
+                    return []; // disabled from user
+                }
+
+                if (item.decorator !== null && item.decorator !== undefined) {
+                    // allow overwrite
+                    if (hasType) {
+                        for (const decorator of item.decorator) {
+                            if (decorator.startsWith('@is')) {
+                                for (const oldType of result) {
+                                    if (oldType.startsWith('@is')) {
+                                        result.splice(result.indexOf(oldType), 1);
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    if (hasMaxLength) {
+                        for (const decorator of item.decorator) {
+                            if (decorator.startsWith('@maxLength')) {
+                                for (const oldType of result) {
+                                    if (oldType.startsWith('@maxLength')) {
+                                        result.splice(result.indexOf(oldType), 1);
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    for (const decorator of item.decorator) {
+                        result.push(decorator);
+                    }
+                }
+            }
+
+        }
+
+        return result;
     }
 
 

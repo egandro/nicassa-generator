@@ -1,4 +1,4 @@
-export type ColumnNameEnum = "None" | "TypeScript" | "Sequelize" | "Database";
+export type ColumnNameEnum = "None" | "TypeScript" | "TypeScriptDecorators" | "Sequelize" | "Database";
 
 export const ColumnNameEnum = {
     None: "None" as ColumnNameEnum,

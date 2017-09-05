@@ -82,7 +82,8 @@ export class SequelizeTSDalGenerator extends BaseGenerator {
             entityContainerName: <any>null,
             modelNaming: modelNaming,
             dataTypeMapping: {},
-            filter: filter
+            filter: filter,
+            createJSDocDecorators: false
         };
 
         return result;
