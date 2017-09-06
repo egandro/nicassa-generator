@@ -6,6 +6,7 @@ import { GeneratorConfigBasic } from './generatorconfig.basic';
 
 export interface CustomJSDocDecorator {
     entity: string;
+    required?: boolean;
     enabled?: boolean;
     decorator: string[];
 }

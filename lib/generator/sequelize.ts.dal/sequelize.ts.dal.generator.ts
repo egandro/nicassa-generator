@@ -1,7 +1,7 @@
 import { Filter } from 'nicassa-parser-db';
 
 import { GeneratorConfigBasic } from '../../persistance/generatorconfig.basic';
-import { GeneratorConfigSequelizeTSDal } from '../../persistance/generatorconfig.sequelize.ts.dal';
+import { GeneratorConfigSequelizeTSDal, CustomJSDocDecorator } from '../../persistance/generatorconfig.sequelize.ts.dal';
 
 import { ModelNaming } from '../../persistance/naming/modelnaming';
 import { CaseEnum } from '../../persistance/naming/case.enum';
@@ -90,8 +90,42 @@ export class SequelizeTSDalGenerator extends BaseGenerator {
     }
 
 
+    protected async updateSymbolTableForJSDecorators(): Promise<boolean> {
+        if (this.generatorConfig.createJSDocDecorators == null ||
+            this.generatorConfig.createJSDocDecorators === undefined ||
+            this.generatorConfig.createJSDocDecorators == false ||
+            this.generatorConfig.customDJSDocDecorators == null ||
+            this.generatorConfig.customDJSDocDecorators === undefined ||
+            this.generatorConfig.customDJSDocDecorators.length == 0) {
+            return await false;
+        }
+
+        const customDecoratorsMap: { [key: string]: CustomJSDocDecorator } = {};
+        for (let item of this.generatorConfig.customDJSDocDecorators) {
+            const key = item.entity.toLowerCase();
+            customDecoratorsMap[key] = item;
+        }
+
+        for (let item of this.dbSymbolTable.columns) {
+            const key = item.table.name.toLowerCase() + '.' + item.name.toLowerCase();
+            if (customDecoratorsMap.hasOwnProperty(key)) {
+                const decorator = customDecoratorsMap[key];
+                if (decorator.required == null ||
+                    decorator.required === undefined ||
+                    !decorator.required) {
+                    continue;
+                }
+                // set to not nullable
+                item.nullable = false;
+            }
+        }
+
+        return await true;
+    }
+
     protected async generateCode(): Promise<boolean> {
         this.dbSymbolTable = DBSymbolTableReader.readFromJsonString(this.nicassaJson, <any>this.generatorConfig.filter, this.typeMapper);
+        await this.updateSymbolTableForJSDecorators();
 
         let createPackageJson: boolean = false;
         let createIndex: boolean = false;
