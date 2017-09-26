@@ -17,6 +17,7 @@ export class AndroidOrmLiteJavaMapping {
             numeric: "Double",
             money: "Double",
             timestamp: "java.util.Date",
+            "timestamp with time zone": "java.util.Date",
             date: "java.util.Date",
             datetime: "java.util.Date",
             datetime2: "java.util.Date",
@@ -66,6 +67,7 @@ export class AndroidOrmLiteJavaMapping {
             numeric: <any>null,
             money: <any>null,
             timestamp: 'yyyy-MM-dd HH:mm:ss.SSSSSS',
+            "timestamp with time zone": "yyyy-MM-dd HH:mm:ss.SSSSSS", // this might be wrong
             date: 'yyyy-MM-dd',
             datetime: 'yyyy-MM-dd HH:mm',
             datetime2: 'yyyy-MM-dd HH:mm',
@@ -115,6 +117,7 @@ export class AndroidOrmLiteJavaMapping {
             numeric: <any>null,
             money: <any>null,
             timestamp: 'com.j256.ormlite.field.DataType.DATE_STRING',
+            "timestamp with time zone": 'com.j256.ormlite.field.DataType.DATE_STRING',
             date: 'com.j256.ormlite.field.DataType.DATE_STRING',
             datetime: 'com.j256.ormlite.field.DataType.DATE_STRING',
             datetime2: 'com.j256.ormlite.field.DataType.DATE_STRING',
