@@ -125,7 +125,7 @@ export class AndroidRetrofitClientGenerator extends BaseGenerator {
 
         await RenderTemplate.renderTemplate(createGitIgnore, this, 'gitignore.ejs', data, '.gitignore');
         await RenderTemplate.renderTemplate(createBuildGradle, this, 'build.gradle.ejs', data);
-        await RenderTemplate.renderTemplate(createBuildGradle, this, 'proguard-rules.pro.ejs', data);
+        await RenderTemplate.renderTemplate(createProguardRulesPro, this, 'proguard-rules.pro.ejs', data);
         await RenderTemplate.renderTemplateToDir(path.join(this.getTargetDir(), 'src/main'), createAndroidManifestXml, this, 'AndroidManifest.xml.ejs', data);
         await RenderTemplate.renderTemplateToDir(path.join(this.getTargetDir(), 'src/main/res/values'), createStringsXml, this, 'strings.xml.ejs', data);
         await RenderTemplate.renderTemplateToDir(namespaceControllerDir, createConfiguration, this, 'configuration.java.ejs', data, 'Configuration.java');
