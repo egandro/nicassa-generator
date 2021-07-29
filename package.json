@@ -28,7 +28,7 @@
     "@types/node": "7.10.14",
     "@types/nomnom": "0.0.28",
     "@types/swagger-parser": "4.0.3",
-    "change-case": "3.1.0",
+    "change-case": "4.1.2",
     "ejs": "2.7.4",
     "fs-force-mkdir-sync": "1.1.0",
     "identifierfy": "1.1.1",
