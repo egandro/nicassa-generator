@@ -24,12 +24,12 @@
     "test": "npm run gentest && npm run testexec"
   },
   "dependencies": {
-    "@types/ejs": "2.7.0",
+    "@types/ejs": "3.1.1",
     "@types/node": "7.10.14",
     "@types/nomnom": "0.0.28",
     "@types/swagger-parser": "4.0.3",
     "change-case": "3.1.0",
-    "ejs": "2.7.4",
+    "ejs": "3.1.8",
     "fs-force-mkdir-sync": "1.1.0",
     "identifierfy": "1.1.1",
     "nicassa-parser-db": "0.0.9",
