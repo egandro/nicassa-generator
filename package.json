@@ -43,7 +43,7 @@
     "@types/node": "8.10.66",
     "@types/nomnom": "0.0.28",
     "tslint": "5.20.1",
-    "tsoa": "1.3.6"
+    "tsoa": "4.1.3"
   },
   "keywords": [
     "mysql",
